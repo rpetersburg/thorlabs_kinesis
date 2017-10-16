@@ -183,8 +183,9 @@ class PiezoController(object):
             try:
                 self.open()
                 self.enable()
-            except KinesisError:
+            except KinesisError as e:
                 warn('Invalid Serial Number. Piezo not set.')
+                print(e)
                 self._serial = ''
         else:
             self._serial = serial
@@ -215,6 +216,8 @@ class PiezoController(object):
             if code:
                 raise KinesisError('PCC_Enable', code)
             self.start_polling()
+            # while not self.is_enabled:
+            #     pass
             self.wait_for_message(1,2)
 
     @_if_open
